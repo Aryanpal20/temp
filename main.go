@@ -18,23 +18,25 @@ import (
 )
 
 type User struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Username string `json:"username"`
-	Phone    int    `json:"phone"`
-	Address  string `json:"address"`
-	Role     string `json:"role"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	Username    string `json:"username"`
+	Phone       int    `json:"phone"`
+	Address     string `json:"address"`
+	Role        string `json:"role"`
+	Hourly_Rate int    `json:"hourly_rate"`
 }
 
 type Task struct {
-	ID          int    `json:"id"`
-	Assign      string `json:"assign"`
-	Reportor    string `json:"reportor"`
-	Title       string `json:"title"`
-	Status      int    `default:"0"`
-	Description string `json:"description"`
-	Created_At  string `json:"created_at"`
-	Comment     string `json:"comment"`
+	ID            int    `json:"id"`
+	Assign        string `json:"assign"`
+	Reportor      string `json:"reportor"`
+	Title         string `json:"title"`
+	Status        int    `default:"0"`
+	Description   string `json:"description"`
+	Created_At    string `json:"created_at"`
+	Comment       string `json:"comment"`
+	Working_Hours int    `json:"working_hours"`
 }
 
 // creating jwt token struct
@@ -97,11 +99,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		// here we can create the token for see the values of email, username, phone, address, expire time of token.
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"email":    users.Email,
-			"username": users.Username,
-			"phone":    users.Phone,
-			"address":  users.Address,
-			"role":     users.Role,
+			"email":       users.Email,
+			"username":    users.Username,
+			"phone":       users.Phone,
+			"address":     users.Address,
+			"role":        users.Role,
+			"hourly_rate": users.Hourly_Rate,
 			// if we put the password here it means the password will also show with all the data.
 			// "password": student.Password,
 			"exp": time.Now().Add(time.Hour * time.Duration(1)).Unix(),
@@ -150,7 +153,7 @@ func Task_Create(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(a)
 	// fmt.Println(b)
 	rep := c
-	if a == "Manager" {
+	if a == "manager" {
 		var task Task
 		json.NewDecoder(r.Body).Decode(&task)
 		task.Reportor = rep
@@ -167,7 +170,7 @@ func Task_Create(w http.ResponseWriter, r *http.Request) {
 func ChangeByManager(w http.ResponseWriter, r *http.Request) {
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := is_manager(token)
-	if a == "Manager" {
+	if a == "manager" {
 		var tasks Task
 		Database.First(&tasks, mux.Vars(r)["id"])
 		json.NewDecoder(r.Body).Decode(&tasks)
@@ -189,7 +192,7 @@ func ChangeByManager(w http.ResponseWriter, r *http.Request) {
 func ChangeByEmployee(w http.ResponseWriter, r *http.Request) {
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := is_manager(token)
-	if a == "Employee" {
+	if a == "employee" {
 		var tasks Task
 		Database.First(&tasks, mux.Vars(r)["id"])
 		c := task_creator(token)
@@ -201,6 +204,9 @@ func ChangeByEmployee(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("update err != nil; %v\n", err)
 			}
 			if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("status", tasks.Status).Error; err != nil {
+				fmt.Printf("update err != nil; %v\n", err)
+			}
+			if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("working_hours", tasks.Working_Hours).Error; err != nil {
 				fmt.Printf("update err != nil; %v\n", err)
 			}
 
@@ -224,7 +230,7 @@ func fetch_details(w http.ResponseWriter, r *http.Request) {
 	c := task_creator(token)
 	a := is_manager(token)
 	ass := c
-	if a == "Employee" {
+	if a == "employee" {
 		var detail = []Task{}
 		Database.Where("assign = ?", ass).Find(&detail)
 		json.NewEncoder(w).Encode(detail)
@@ -237,12 +243,17 @@ func fetch_details(w http.ResponseWriter, r *http.Request) {
 
 func Filter_Records(w http.ResponseWriter, r *http.Request) {
 
-	var tasks = []Task{}
+	var tasks Task
 	params := r.URL.Query().Get("assign")
+
 	id := r.URL.Query().Get("id")
-	status := r.URL.Query().Get("status")
-	fmt.Println("Query string key value", params)
-	Database.Where("assign = ? or id = ? or status = ?", params, id, status).Find(&tasks)
+	Database.Where("assign = ? or id = ?", params, id).Find(&tasks)
+	// status := r.URL.Query().Get("status")
+
+	// if status == "status" {
+	// 	Database.Where("status = ?", status).Find(&tasks)
+	// }
+	// fmt.Println("Query string key value", params)
 
 	// fmt.Println("Query string key value", id)
 	// Database.Where("id = ?", id).Find(&tasks)
@@ -251,6 +262,45 @@ func Filter_Records(w http.ResponseWriter, r *http.Request) {
 	// Database.Where("status = ?", status).Find(&tasks)
 	json.NewEncoder(w).Encode(tasks)
 
+}
+func Salary(w http.ResponseWriter, r *http.Request) {
+	token := strings.Split(r.Header["Token"][0], " ")[1]
+	a := is_manager(token)
+	var email string
+	if a == "manager" {
+		var user User
+		var task Task
+		if user.Email == email {
+			c := user.* task.Working_Hours
+			fmt.Println(c)
+			json.NewEncoder(w).Encode(c)
+		}
+		// Database.Save(user)
+	} else {
+		b := "access denied !!!"
+		json.NewEncoder(w).Encode(b)
+	}
+
+}
+
+func ManagerFixRate(w http.ResponseWriter, r *http.Request) {
+	token := strings.Split(r.Header["Token"][0], " ")[1]
+	a := is_manager(token)
+	var email string
+	if a == "manager" {
+		var user User
+		if user.Email == email {
+			json.NewDecoder(r.Body).Decode(&user)
+			if err := Database.Model(&user).Where("email = ?", user.Email).Update("hourly_rate", user.Hourly_Rate).Error; err != nil {
+				fmt.Printf("update err != nil; %v\n", err)
+			}
+		}
+		Database.Save(user)
+		json.NewEncoder(w).Encode(user)
+	} else {
+		b := "access denied !!!"
+		json.NewEncoder(w).Encode(b)
+	}
 }
 
 func Profile(w http.ResponseWriter, r *http.Request) {
@@ -284,9 +334,9 @@ func Manager(w http.ResponseWriter, r *http.Request) {
 
 	token := r.FormValue("Token")
 	a := is_manager(token)
-	if a == "Manager" {
+	if a == "manager" {
 		var users = []User{}
-		Database.Where("role IN ?", []string{"Manager", "Employee"}).Find(&users)
+		Database.Where("role IN ?", []string{"manager", "employee"}).Find(&users)
 		fmt.Println(users)
 		json.NewEncoder(w).Encode(users)
 	} else {
@@ -299,7 +349,7 @@ func Employee(w http.ResponseWriter, r *http.Request) {
 
 	// here we can use database for fetching all same records in role field
 	var users = []User{}
-	Database.Where("role = ?", "Employee").Find(&users)
+	Database.Where("role = ?", "employee").Find(&users)
 	fmt.Println(users)
 	json.NewEncoder(w).Encode(users)
 }
@@ -309,7 +359,7 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	a := is_manager(token)
 	if a == "admin" {
 		var users = []User{}
-		Database.Where("role IN ?", []string{"admin", "Manager", "Employee"}).Find(&users)
+		Database.Where("role IN ?", []string{"admin", "manager", "employee"}).Find(&users)
 		fmt.Println(users)
 		json.NewEncoder(w).Encode(users)
 	} else {
@@ -333,6 +383,8 @@ func HandlerRouting() {
 	r.HandleFunc("/task/{id}", ChangeByManager).Methods("PATCH")
 	r.HandleFunc("/tasks/{id}", ChangeByEmployee).Methods("PATCH")
 	r.HandleFunc("/filter", Filter_Records).Methods("GET")
+	r.HandleFunc("/userss", ManagerFixRate).Methods("POST")
+	r.HandleFunc("/salary", Salary).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
