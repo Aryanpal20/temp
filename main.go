@@ -28,15 +28,17 @@ type User struct {
 }
 
 type Task struct {
-	ID            int    `json:"id"`
-	Assign        string `json:"assign"`
-	Reportor      string `json:"reportor"`
-	Title         string `json:"title"`
-	Status        int    `default:"0"`
-	Description   string `json:"description"`
-	Created_At    string `json:"created_at"`
-	Comment       string `json:"comment"`
-	Working_Hours int    `json:"working_hours"`
+	ID                 int    `json:"id"`
+	Assign             string `json:"assign"`
+	Reportor           string `json:"reportor"`
+	Title              string `json:"title"`
+	Status             int    `default:"0"`
+	Description        string `json:"description"`
+	Created_At         string `json:"created_at"`
+	Comment            string `json:"comment"`
+	Working_Hours      int    `json:"working_hours"`
+	Estimate_time_work string `json:"estimate_time_work"`
+	Work_Done_time     string `json:"work_done_time"`
 }
 
 // creating jwt token struct
@@ -177,7 +179,7 @@ func ChangeByManager(w http.ResponseWriter, r *http.Request) {
 		if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("assign", tasks.Assign).Error; err != nil {
 			fmt.Printf("update err != nil; %v\n", err)
 		}
-		if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("status", tasks.Status).Error; err != nil {
+		if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("estimate_time_work", tasks.Estimate_time_work).Error; err != nil {
 			fmt.Printf("update err != nil; %v\n", err)
 		}
 
@@ -207,6 +209,9 @@ func ChangeByEmployee(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("update err != nil; %v\n", err)
 			}
 			if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("working_hours", tasks.Working_Hours).Error; err != nil {
+				fmt.Printf("update err != nil; %v\n", err)
+			}
+			if err := Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("work_done_time", tasks.Work_Done_time).Error; err != nil {
 				fmt.Printf("update err != nil; %v\n", err)
 			}
 
@@ -269,13 +274,33 @@ func Salary(w http.ResponseWriter, r *http.Request) {
 	var email string
 	if a == "manager" {
 		var user User
+		var z int = 0
+		var e int
 		var task Task
+		var tasks = []Task{}
 		if user.Email == email {
-			c := user.* task.Working_Hours
-			fmt.Println(c)
-			json.NewEncoder(w).Encode(c)
+			json.NewDecoder(r.Body).Decode(&user)
+			Database.Where("email = ?", user.Email).Find(&user)
+			if task.Assign == email {
+				Database.Where("assign = ?", user.Email).Find(&tasks)
+				// json.NewEncoder(w).Encode(tasks)
+				for _, k := range tasks {
+					Database.Where("assign = ?", user.Email).Find(&task)
+					if k.Status == 1 {
+						c := user.Hourly_Rate * k.Working_Hours
+						if k.Estimate_time_work >= k.Work_Done_time {
+							d := user.Hourly_Rate * k.Working_Hours
+							e = d * 5 / 100
+							fmt.Println("the bonous is : ", e)
+						}
+						z = z + c + e
+					}
+
+				}
+
+			}
 		}
-		// Database.Save(user)
+		json.NewEncoder(w).Encode(z)
 	} else {
 		b := "access denied !!!"
 		json.NewEncoder(w).Encode(b)
