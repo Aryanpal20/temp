@@ -1,5 +1,10 @@
 package main
 
+import (
+	database "api/database"
+	routing "api/routing"
+)
+
 // creating Exception struct
 // type Exception struct {
 // 	Message string `json:"message"`
@@ -11,8 +16,8 @@ package main
 // }
 
 func main() {
-	DataMigration()
-	HandlerRouting()
+	database.DataMigration()
+	routing.HandlerRouting()
 
 }
 
