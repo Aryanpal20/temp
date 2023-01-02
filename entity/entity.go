@@ -24,4 +24,5 @@ type Task struct {
 	Working_Hours      int    `json:"working_hours"`
 	Estimate_time_work string `json:"estimate_time_work"`
 	Work_Done_time     string `json:"work_done_time"`
+	Feedback           string `json:"feedback"`
 }

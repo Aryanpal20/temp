@@ -7,6 +7,7 @@ import (
 	alltaskdetail "api/alltaskdetail"
 	changebyemployee "api/changebyemployee"
 	changebymanager "api/changebymanager"
+	feedback "api/feedback"
 	fetch "api/fetchdetail"
 	filterrecord "api/filterrecord"
 	login "api/login"
@@ -37,6 +38,8 @@ func HandlerRouting() {
 	r.HandleFunc("/userss", fixrate.ManagerFixRate).Methods("POST")
 	r.HandleFunc("/salary", salary.Salary).Methods("GET")
 	r.HandleFunc("/detail", alltaskdetail.DetailByManager).Methods("GET")
+	r.HandleFunc("/feedback", feedback.FetchDetailByStatus).Methods("GET")
+	r.HandleFunc("/feedback/{id}", feedback.PostFeedback).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
