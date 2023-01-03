@@ -16,7 +16,7 @@ import (
 func ChangeByManager(w http.ResponseWriter, r *http.Request) {
 	// here we can split the token and decode the token
 	token := strings.Split(r.Header["Token"][0], " ")[1]
-	// here we can compare with employee
+	// here we can compare with manager
 	a := role.Is_manager(token)
 	if a == "manager" {
 		var tasks entity.Task
