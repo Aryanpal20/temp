@@ -7,6 +7,7 @@ import (
 	alltaskdetail "api/alltaskdetail"
 	changebyemployee "api/changebyemployee"
 	changebymanager "api/changebymanager"
+	"api/cron"
 	feedback "api/feedback"
 	fetch "api/fetchdetail"
 	filterrecord "api/filterrecord"
@@ -40,6 +41,7 @@ func HandlerRouting() {
 	r.HandleFunc("/detail", alltaskdetail.DetailByManager).Methods("GET")
 	r.HandleFunc("/feedback", feedback.FetchDetailByStatus).Methods("GET")
 	r.HandleFunc("/feedback/{id}", feedback.PostFeedback).Methods("POST")
+	r.HandleFunc("/data", cron.Data).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

@@ -35,7 +35,7 @@ func FetchDetailByStatus(w http.ResponseWriter, r *http.Request) {
 		if assign != "" && status != "" {
 			database.Database.Where("assign = ? and status = ?", assign, status).Find(&tasks)
 		}
-		// here we can use for loop for see all the data ion beautifull manner.
+		// here we can use for loop for see all the data in beautifull manner.
 		for _, k := range tasks {
 			json.NewEncoder(w).Encode(k)
 		}

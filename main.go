@@ -2,6 +2,7 @@ package main
 
 import (
 	database "api/database"
+	rating "api/rating"
 	routing "api/routing"
 )
 
@@ -16,7 +17,9 @@ import (
 // }
 
 func main() {
+
 	database.DataMigration()
+	rating.RunCronJobs()
 	routing.HandlerRouting()
 
 }

@@ -31,6 +31,10 @@ func ChangeByManager(w http.ResponseWriter, r *http.Request) {
 		if err := database.Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("estimate_time_work", tasks.Estimate_time_work).Error; err != nil {
 			fmt.Printf("update err != nil; %v\n", err)
 		}
+		// here we can update the rating by manager
+		if err := database.Database.Model(&tasks).Where("reportor = ?", tasks.Reportor).Update("rating", tasks.Rating).Error; err != nil {
+			fmt.Printf("update err != nil; %v\n", err)
+		}
 
 		// Database.Create(&task)
 		json.NewEncoder(w).Encode(tasks)
