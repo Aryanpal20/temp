@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	Admin "api/adminaccess"
 	alltaskdetail "api/alltaskdetail"
 	changebyemployee "api/changebyemployee"
 	changebymanager "api/changebymanager"
@@ -42,6 +43,7 @@ func HandlerRouting() {
 	r.HandleFunc("/feedback", feedback.FetchDetailByStatus).Methods("GET")
 	r.HandleFunc("/feedback/{id}", feedback.PostFeedback).Methods("POST")
 	r.HandleFunc("/data", cron.Data).Methods("GET")
+	r.HandleFunc("/admin", Admin.Admin).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

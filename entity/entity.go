@@ -26,4 +26,5 @@ type Task struct {
 	Work_Done_time     string  `json:"work_done_time"`
 	Feedback           string  `json:"feedback"`
 	Rating             float64 `json:"rating"`
+	Average_Rating     float64 ` json:"average_rating"`
 }
