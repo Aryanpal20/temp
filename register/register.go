@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"api/database"
 	entity "api/entity"
 	"api/smtps"
 
@@ -36,7 +37,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(users)
 
 	// here we can create the data on the database but the password will be saved in hashed Password
-	// database.Database.Create(&user
+	database.Database.Create(&user)
 	fmt.Println(to)
 	smtps.Smtp(to, "this is my last message")
 }
