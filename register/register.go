@@ -5,17 +5,22 @@ import (
 	"fmt"
 	"net/http"
 
-	"api/database"
 	entity "api/entity"
 	"api/smtps"
+
+	// "api/smtps"
+	// sms "api/messages"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 func Create(w http.ResponseWriter, r *http.Request) {
+	to := r.FormValue("to")
+	// setto := r.FormValue("setto")
+	// body := r.FormValue("body")
 
 	w.Header().Set("Content-Type", "application/json")
-	to := r.FormValue("to")
+
 	// message := r.FormValue("message")
 	var user entity.User
 	// var users = []entity.User{}
@@ -37,9 +42,9 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(users)
 
 	// here we can create the data on the database but the password will be saved in hashed Password
-	database.Database.Create(&user)
-	fmt.Println(to)
+	// database.Database.Create(&user)
 	smtps.Smtp(to, "this is my last message")
+	// sms.SMS(setto, body)
 }
 
 // func Smtp(to string, message string) {
