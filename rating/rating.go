@@ -56,14 +56,14 @@ func RunCronJobs() {
 	s := gocron.NewScheduler(time.Local)
 	// here we can set the time for is rating function.
 	// job1, _ := s.Every(1).Day().At("16:05")
-	job, _ := s.Cron("23 12 * * *").Do(func() {
+	job, _ := s.Cron("43 12 * * *").Do(func() {
 		// hello("chonu")
 		Is_Rating()
 
 	})
 	// here we can set the time for hello function.
 	// job1, _ := s.Every(1).Day().At("16:07")
-	job1, _ := s.Cron("23 12 * * *").Do(func() {
+	job1, _ := s.Cron("42 12 * * *").Do(func() {
 		hello("rohan, sonu, chonu")
 	})
 	s.StartAsync()

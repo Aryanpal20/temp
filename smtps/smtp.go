@@ -15,7 +15,10 @@ func Smtp(to string, message string) {
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "25"
 
-	// message := []byte("This is a test email message.")
+	// message = []byte("From: aryanpal692@gmail.com\r\n" +
+	// 	"To: mohan@mailinator.com\r\n" +
+	// 	"Subject: Test mail\r\n\r\n" +
+	// 	"Email body\r\n")
 
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 
