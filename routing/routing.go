@@ -15,6 +15,7 @@ import (
 	login "api/login"
 	fixrate "api/managerfixrate"
 	create "api/register"
+	rel "api/relations"
 	salary "api/salary"
 	same "api/samerecord"
 	task "api/taskcreater"
@@ -44,6 +45,7 @@ func HandlerRouting() {
 	r.HandleFunc("/feedback/{id}", feedback.PostFeedback).Methods("POST")
 	r.HandleFunc("/data", cron.Data).Methods("GET")
 	r.HandleFunc("/admin", Admin.Admin).Methods("GET")
+	r.HandleFunc("/relation", rel.GetRelation).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

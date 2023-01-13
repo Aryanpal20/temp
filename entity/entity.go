@@ -2,6 +2,7 @@ package entity
 
 // here we can create the struct as well as table User
 type User struct {
+	ID          int    `json:"id"`
 	Email       string `json:"email"`
 	Password    string `json:"password"`
 	Username    string `json:"username"`
@@ -9,6 +10,7 @@ type User struct {
 	Address     string `json:"address"`
 	Role        string `json:"role"`
 	Hourly_Rate int    `json:"hourly_rate"`
+	Tasks       []Task `gorm:"ForeignKey:UserId"`
 }
 
 // here we can create the struct as well as table Task
@@ -27,4 +29,5 @@ type Task struct {
 	Feedback           string  `json:"feedback"`
 	Rating             float64 `json:"rating"`
 	Average_Rating     float64 ` json:"average_rating"`
+	UserId             int     `json:"user_id"`
 }

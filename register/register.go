@@ -8,9 +8,6 @@ import (
 	"api/database"
 	entity "api/entity"
 
-	sms "api/messages"
-	"api/smtps"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -43,11 +40,11 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 		// fmt.Println(password)
 		// here we want to send email message on user email.
-		smtps.Smtp(user.Email, "Subject: Registration \r\n\r\n"+"Hi, "+user.Username+" \nYour Account has been created successfully"+
-			"\n Email : "+user.Email+"\n Password : "+string(password))
-		// fmt.Println(user.Phone)
-		// here we want to send a sms message on user phone number
-		sms.SMS(user.Phone, "Hello, "+user.Username+" Your Account has been created successfully")
+		// smtps.Smtp(user.Email, "Subject: Registration \r\n\r\n"+"Hi, "+user.Username+" \nYour Account has been created successfully"+
+		// 	"\n Email : "+user.Email+"\n Password : "+string(password))
+		// // fmt.Println(user.Phone)
+		// // here we want to send a sms message on user phone number
+		// sms.SMS(user.Phone, "Hello, "+user.Username+" Your Account has been created successfully")
 	} else {
 		b := "This Email already exist"
 		json.NewEncoder(w).Encode(b)
