@@ -12,13 +12,18 @@ import (
 	feedback "api/feedback"
 	fetch "api/fetchdetail"
 	filterrecord "api/filterrecord"
+	forget "api/forgetpassword"
 	login "api/login"
 	fixrate "api/managerfixrate"
+	otp "api/otpcreate"
 	create "api/register"
+	cc "api/relation"
 	rel "api/relations"
 	salary "api/salary"
 	same "api/samerecord"
+	create1 "api/taskcreate1"
 	task "api/taskcreater"
+	OTP "api/verifyotp"
 
 	"github.com/gorilla/mux"
 )
@@ -46,6 +51,11 @@ func HandlerRouting() {
 	r.HandleFunc("/data", cron.Data).Methods("GET")
 	r.HandleFunc("/admin", Admin.Admin).Methods("GET")
 	r.HandleFunc("/relation", rel.GetRelation).Methods("GET")
+	r.HandleFunc("/rel", cc.Relation).Methods("GET")
+	r.HandleFunc("/taskcreate", create1.TaskCreate).Methods("POST")
+	r.HandleFunc("/forget", forget.Forgetpassword).Methods("GET")
+	r.HandleFunc("/otp", otp.OTP).Methods("POST")
+	r.HandleFunc("/OTP", OTP.VerifyOTP).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

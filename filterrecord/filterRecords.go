@@ -8,6 +8,7 @@ import (
 )
 
 func Filter_Records(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	var tasks = []entity.Task{}
 	// here user give the assign, id, status in params

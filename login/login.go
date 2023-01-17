@@ -23,6 +23,7 @@ type jwtToken struct {
 var JwtKey = []byte(os.Getenv("Jwt_Key"))
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	// here we give the data from (form-data)
 	email := r.FormValue("email")

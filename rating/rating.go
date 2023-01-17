@@ -38,9 +38,9 @@ func Is_Rating() {
 
 			avg := (sum) / (float64(n))
 			fmt.Println("Sum = ", sum, "\nAverage = ", avg)
-			if err := database.Database.Model(&task).Where("assign = ?", i.Email).Update("average_rating", avg).Error; err != nil {
-				fmt.Printf("update err != nil; %v\n", err)
-			}
+			// if err := database.Database.Model(&task).Where("assign = ?", i.Email).Update("average_rating", avg).Error; err != nil {
+			// 	fmt.Printf("update err != nil; %v\n", err)
+			// }
 
 		}
 	}
@@ -56,14 +56,14 @@ func RunCronJobs() {
 	s := gocron.NewScheduler(time.Local)
 	// here we can set the time for is rating function.
 	// job1, _ := s.Every(1).Day().At("16:05")
-	job, _ := s.Cron("43 12 * * *").Do(func() {
+	job, _ := s.Cron("52 10 * * *").Do(func() {
 		// hello("chonu")
 		Is_Rating()
 
 	})
 	// here we can set the time for hello function.
 	// job1, _ := s.Every(1).Day().At("16:07")
-	job1, _ := s.Cron("42 12 * * *").Do(func() {
+	job1, _ := s.Cron("52 10 * * *").Do(func() {
 		hello("rohan, sonu, chonu")
 	})
 	s.StartAsync()

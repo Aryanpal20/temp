@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 // here we can create the struct as well as table User
 type User struct {
 	ID          int    `json:"id"`
@@ -11,6 +13,7 @@ type User struct {
 	Role        string `json:"role"`
 	Hourly_Rate int    `json:"hourly_rate"`
 	Tasks       []Task `gorm:"ForeignKey:UserId"`
+	OTPS        []Otp  `gorm:"ForeignKey:Userid"`
 }
 
 // here we can create the struct as well as table Task
@@ -30,4 +33,12 @@ type Task struct {
 	Rating             float64 `json:"rating"`
 	Average_Rating     float64 ` json:"average_rating"`
 	UserId             int     `json:"user_id"`
+}
+
+type Otp struct {
+	ID          int       `json:"id"`
+	Userid      int       `json:"user_id"`
+	Email       string    `json:"email"`
+	Otp         string    `json:"otp"`
+	Expire_time time.Time `json:"expire_time"`
 }

@@ -11,6 +11,7 @@ import (
 )
 
 func Fetchdetail(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	// here we can give the token and decode the token
 	token := strings.Split(r.Header["Token"][0], " ")[1]

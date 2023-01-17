@@ -11,7 +11,8 @@ import (
 )
 
 func ManagerFixRate(w http.ResponseWriter, r *http.Request) {
-	// here we can split the token and decode the token
+	w.Header().Set("Content-Type", "application/json")
+	// here we can split the token and decode the tokens
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := role.Is_manager(token)
 	var email string

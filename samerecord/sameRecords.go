@@ -27,6 +27,7 @@ func Manager(w http.ResponseWriter, r *http.Request) {
 }
 
 func Employee(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	// here we can use database for fetching all same records in role field
 	var users = []entity.User{}

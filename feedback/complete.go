@@ -48,6 +48,7 @@ func FetchDetailByStatus(w http.ResponseWriter, r *http.Request) {
 
 // here we want to create a post api for only manager access
 func PostFeedback(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	// here we can split the token and decode the token
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := role.Is_manager(token)

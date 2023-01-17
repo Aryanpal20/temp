@@ -10,6 +10,7 @@ import (
 )
 
 func Admin(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := role.Is_manager(token)
 	var task = []entity.Task{}

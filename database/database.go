@@ -25,5 +25,5 @@ func DataMigration() {
 
 		panic("connection failed")
 	}
-	Database.AutoMigrate(entity.User{}, entity.Task{})
+	Database.AutoMigrate(entity.User{}, entity.Task{}, entity.Otp{})
 }

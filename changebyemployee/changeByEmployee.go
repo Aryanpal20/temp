@@ -15,6 +15,7 @@ import (
 )
 
 func ChangeByEmployee(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	a := role.Is_manager(token)
 	// here we can compare with employee

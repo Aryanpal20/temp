@@ -1,3 +1,4 @@
+// here we can't use foreign key
 package taskcreater
 
 import (
@@ -12,6 +13,7 @@ import (
 )
 
 func Task_Create(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	// here we can give the token in header for decode using Bearer
 	token := strings.Split(r.Header["Token"][0], " ")[1]
 	// here we can store the value of role in a variable

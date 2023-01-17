@@ -1,3 +1,4 @@
+// here we  can do with join query
 package relations
 
 import (
@@ -9,6 +10,7 @@ import (
 )
 
 func GetRelation(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	var user entity.User
 	var tasks []entity.Task
@@ -21,7 +23,6 @@ func GetRelation(w http.ResponseWriter, r *http.Request) {
 	}
 	user.Tasks = append(user.Tasks, tasks...)
 	w.WriteHeader(http.StatusCreated)
-
 	json.NewEncoder(w).Encode(user)
 	// json.NewEncoder(w).Encode(user.Email)
 	// json.NewEncoder(w).Encode(user.Username)
