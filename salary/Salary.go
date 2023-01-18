@@ -33,22 +33,21 @@ func Salary(w http.ResponseWriter, r *http.Request) {
 				for _, k := range tasks {
 					database.Database.Where("assign = ?", user.Email).Find(&task)
 					// here we can compare status is equal to completed
-					if k.Status == 1 {
+					if k.Status == 1 || k.Status == 2 || k.Status == 0 {
 						// here we get a salary of completed tasks
 						c := user.Hourly_Rate * k.Working_Hours
-						// here we can check for bonus if work is done before estimate time given by manager
-						if k.Estimate_time_work >= k.Work_Done_time {
-							d := user.Hourly_Rate * k.Working_Hours
-							// here we can give the bonus of 5%.
-							e = d * 5 / 100
-							fmt.Println("the bonous is : ", e)
-						}
-						// here swe can add the bonus in the employee salary
-						z = z + c + e
+						z = z + c
 					}
-
+					// here we can check for bonus if work is done before estimate time given by manager
+					if k.Estimate_time_work >= k.Work_Done_time {
+						d := user.Hourly_Rate * k.Working_Hours
+						// here we can give the bonus of 5%.
+						e = d * 5 / 100
+						fmt.Println("the bonous is : ", e)
+						// here swe can add the bonus in the employee salary
+						z = z + e
+					}
 				}
-
 			}
 		}
 		json.NewEncoder(w).Encode(z)
