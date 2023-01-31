@@ -21,8 +21,8 @@ func OTP(w http.ResponseWriter, r *http.Request) {
 	database.Database.Where("email = ?", otp.Email).Find(&otps)
 	fmt.Println(len(otps))
 	fmt.Println(user)
-	var max = 9999
-	var min = 1000
+	var max = 999999
+	var min = 100000
 	v := rand.Intn(max-min) + min
 	otp.Expire_time = time.Now().Local().Add(time.Minute * time.Duration(1))
 	otp.Otp = strconv.Itoa(v)
